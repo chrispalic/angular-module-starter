@@ -1,0 +1,15 @@
+<div class="form-group" [formGroup]="form">
+  <div class="question-wrapper" [ngClass]="{hidden : !visible, 'has-error': hasError}">
+    <label class="{{labelClass}}" for="{{formControlName}}">{{labelText}}</label>
+    <div [ngClass]="{hidden : readOnly}" class="{{divClass}}">
+      <input type="text" class="form-control" [ngClass]="{'is-invalid': hasError}" formControlName="{{formControlName}}" 
+        name="{{formControlName}}" id="{{formControlName}}" placeholder="{{placeholder}}"/>
+      <div class="invalid-feedback help-block" *ngIf="hasError">
+        {{errorMessage}}
+      </div>
+    </div>
+    <div [ngClass]="{hidden : !readOnly}" class="{{divClass + ' input-group'}}">
+      <div class="form-control-plaintext">{{value}}</div>
+    </div>
+  </div>
+</div>
