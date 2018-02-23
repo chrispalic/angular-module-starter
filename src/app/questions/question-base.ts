@@ -1,5 +1,5 @@
 import { Input, ChangeDetectorRef } from '@angular/core';
-import { FormGroup, AbstractControl, Validators, ValidatorFn } from '@angular/forms';
+import { FormControl, FormGroup, AbstractControl, Validators, ValidatorFn } from '@angular/forms';
 import { Subscription } from 'rxjs/Subscription';
 
 // import { RuleCommunicationService } from '../services/rule-communication.service';
@@ -8,7 +8,7 @@ export class QuestionBase {
   @Input()readOnly = false;
   @Input()definition:any;
   @Input()language = 'english';
-  protected currentControl:any;
+  protected currentControl: AbstractControl | null;
   protected validatorsToBind:Array<ValidatorFn>=[];
   public placeholder:string;
   public labelText:string;
@@ -112,12 +112,12 @@ export class QuestionBase {
     }
   }
 
-  checkValidationStatus(control: AbstractControl, language:string, forceValidation:boolean = false):string {
+  checkValidationStatus(control: AbstractControl | null, language:string, forceValidation:boolean = false):string {
     // reset hasError and message string
     let message = '';
     this.hasError = false;
 
-    if((control.dirty || control.touched || forceValidation) && control.errors) {
+    if(control && (control.dirty || control.touched || forceValidation) && control.errors) {
       Object.keys(control.errors).map(messageKey => {
         if(this.validationMessages[this.language][messageKey]) {
           let tempMessage = this.validationMessages[this.language][messageKey]
@@ -150,7 +150,7 @@ export class QuestionBase {
     if(definition.required && definition.visible) {
       this.validatorsToBind.push(Validators.required);
     }
-    if(this.validatorsToBind.length > 0) {
+    if(this.validatorsToBind.length > 0 && this.currentControl) {
       this.currentControl.setValidators(this.validatorsToBind);
     }
     this.setCssClasses(definition.column_width);
@@ -180,14 +180,14 @@ export class QuestionBase {
         break;
       }
       case 'set question value':{
-        if (this.currentControl.value !== ruleAction.value) {
+        if (this.currentControl && this.currentControl.value !== ruleAction.value) {
           this.currentControl.setValue(ruleAction.value);
           this.value = ruleAction.value;
         }
         break;
       }
       case 'make question readonly':{
-        if (this.readOnly === false) {
+        if (this.currentControl && this.readOnly === false) {
           this.readOnly = true;
           // ensure the local varialbe is the same as the form model
           this.value = this.currentControl.value;
@@ -211,7 +211,9 @@ export class QuestionBase {
         break;
       }
       case 'force question validation':{
-        this.errorMessage = this.checkValidationStatus(this.currentControl, this.language, true);
+        if (this.currentControl) {
+          this.errorMessage = this.checkValidationStatus(this.currentControl, this.language, true);
+        }
         break;
       }
     }
@@ -232,7 +234,7 @@ export class QuestionBase {
   }
 
   bindValidationArray(validators:Array<ValidatorFn>) {
-    if(validators.length > 0) {
+    if(this.currentControl && validators.length > 0) {
       this.currentControl.setValidators(validators);
     }
   }

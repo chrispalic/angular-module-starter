@@ -23,7 +23,10 @@ export class StringComponent extends QuestionBase implements OnInit, AfterViewIn
 
   ngOnInit() {
     super.setParameters(this.definition);
-    this.value = this.currentControl.value;
+    if (this.currentControl) {
+      this.value = this.currentControl.value;
+    }
+    
   };
 
   ngAfterViewInit() {
@@ -34,9 +37,12 @@ export class StringComponent extends QuestionBase implements OnInit, AfterViewIn
     // this.formInputElements.do((element:ElementRef) => blurEvents.push(Observable.fromEvent(element.nativeElement, 'blur')));
     // this.formInputElements
     //         .map((formControl: ElementRef) => {debugger;blurEvents.push(Observable.fromEvent(formControl.nativeElement, 'blur'));})
-    Observable.merge(this.currentControl.valueChanges, ...blurEvents).debounceTime(500).subscribe((value:any) => {
-            this.errorMessage = this.checkValidationStatus(this.currentControl, this.language);
-        });
+    if (this.currentControl) {
+      Observable.merge(this.currentControl.valueChanges, ...blurEvents).debounceTime(500).subscribe((value:any) => {
+        this.errorMessage = this.checkValidationStatus(this.currentControl, this.language);
+      });
+    }
+    
   };
 
   ngOnDestroy() {
