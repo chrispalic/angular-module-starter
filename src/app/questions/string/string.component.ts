@@ -6,7 +6,7 @@ import { Observable } from 'rxjs/Observable';
 
 
 import { QuestionBase } from '../question-base';
-import { RuleCommunicationService } from '../../services/rule-communication.service';
+// import { RuleCommunicationService } from '../../services/rule-communication.service';
 // Disabling linting for the component declaration - CTP
 /* tslint:disable */
 @Component({
@@ -17,8 +17,8 @@ import { RuleCommunicationService } from '../../services/rule-communication.serv
 /* tslint:enable */
 export class StringComponent extends QuestionBase implements OnInit, AfterViewInit, OnDestroy {
   @ViewChildren(FormControlName, { read: ElementRef }) formInputElements: ElementRef[];
-  constructor(private ruleService:RuleCommunicationService, private changeDetector:ChangeDetectorRef) {
-    super(ruleService, changeDetector);
+  constructor(private changeDetector:ChangeDetectorRef) {
+    super(changeDetector);
   };
 
   ngOnInit() {

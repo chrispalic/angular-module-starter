@@ -2,13 +2,13 @@ import { Input, ChangeDetectorRef } from '@angular/core';
 import { FormGroup, AbstractControl, Validators, ValidatorFn } from '@angular/forms';
 import { Subscription } from 'rxjs/Subscription';
 
-import { RuleCommunicationService } from '../services/rule-communication.service';
+// import { RuleCommunicationService } from '../services/rule-communication.service';
 export class QuestionBase {
   @Input()form:FormGroup;
   @Input()readOnly = false;
   @Input()definition:any;
   @Input()language = 'english';
-  protected currentControl:AbstractControl;
+  protected currentControl:any;
   protected validatorsToBind:Array<ValidatorFn>=[];
   public placeholder:string;
   public labelText:string;
@@ -26,7 +26,7 @@ export class QuestionBase {
   public labelClass = 'question-label';
   public containerClass = 'col-md-6';
   protected validationMessages: { [key: string]: { [key: string]: string } };
-  constructor(private baseRuleService:RuleCommunicationService, private baseChangeDetector: ChangeDetectorRef) {
+  constructor( private baseChangeDetector: ChangeDetectorRef) {
     this.validationMessages = {
       english:{
         required:'This is a required field',
@@ -40,13 +40,13 @@ export class QuestionBase {
         maxlength:'Este campo no puede exceder los caracteres X'
       }
     };
-    this.subscription = baseRuleService.ruleAnnounceSource$.subscribe(
-      ruleAction => {
-        if(this.formControlName === ruleAction.name) {
-          this.ruleActionHandler(ruleAction);
-        }
-      }
-    )
+    // this.subscription = baseRuleService.ruleAnnounceSource$.subscribe(
+    //   (ruleAction:any) => {
+    //     if(this.formControlName === ruleAction.name) {
+    //       this.ruleActionHandler(ruleAction);
+    //     }
+    //   }
+    // )
   }
   setCssClasses(columnWidth:number):void {
     switch (columnWidth) {

@@ -1,2 +1,2 @@
-export * from './starter/starter.module';
+export * from './questions/questions.module';
 //# sourceMappingURL=index.js.map

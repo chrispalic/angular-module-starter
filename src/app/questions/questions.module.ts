@@ -14,6 +14,10 @@ import { StringComponent } from './string/string.component';
   ],
   declarations: [
     StringComponent
+  ],
+  exports: [
+    StringComponent
   ]
+
 })
 export class QuestionsModule { }
